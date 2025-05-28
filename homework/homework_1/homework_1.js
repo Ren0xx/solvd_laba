@@ -34,20 +34,25 @@ String.prototype.minus = function (number) {
 	const a = this.split("").reverse();
 	const b = number.split("").reverse();
 	const result = [];
-	const borrowValue = 0;
+	let borrowValue = 0;
 
 	for (let i = 0; i < a.length; i++) {
 		let digitA = Number.parseInt(a[i]) - borrowValue;
 		const digitB = i < b.length ? Number.parseInt(b[i], 10) : 0;
 		if (digitA < digitB) {
 			digitA += 10;
-			borrow = 1;
+			borrowValue = 1;
 		} else {
-			borrow = 0;
+			borrowValue = 0;
 		}
 		result.push(digitA - digitB);
 	}
-	return result.reverse().join("");
+	return (
+		result
+			.reverse()
+			.join("")
+			.replace(/^0+(?!$)/, "") || "0"
+	); // Remove leading zeros with empty string
 };
 
 /**
@@ -155,6 +160,6 @@ console.log(
 );
 console.log(
 	"999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999".divide(
-		"9345671111111111111111111111231231",
+		"999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999",
 	),
 );
