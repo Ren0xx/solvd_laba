@@ -1,67 +1,63 @@
-// 1.
 /**
  * @param {{firstName: string, lastName:string}} person
- * @return {String}
+ * @return {string}
  */
 function getFullName(person) {
+    if (
+        typeof person !== 'object' ||
+        person === null ||
+        typeof person.firstName !== 'string' ||
+        typeof person.lastName !== 'string'
+    ) {
+        throw new TypeError('Expected { firstName: string, lastName: string }');
+    }
     return `${person.firstName} ${person.lastName}`;
-};
+}
 
-// 2.
 /**
- * @param {String} words
- * @return {String[]} - unique words sorted
+ * @param {string} words
+ * @return {string[]} 
  */
 function filterUniqueWords(words) {
-    const isUniqueWord = (arr, word) => arr.indexOf(word) === arr.lastIndexOf(word);
-    return words.split(" ").filter((word, _, arr) => isUniqueWord(arr, word)).sort();
-};
+    if (typeof words !== 'string') {
+        throw new TypeError('Expected a string');
+    }
+    const seen = new Map();
+    for (const w of words.trim().split(/\s+/)) {
+        if (!/^[A-Za-z]+$/.test(w)) continue;
+        const key = w.toLowerCase();
+        if (!seen.has(key)) seen.set(key, w);
+    }
+    return Array.from(seen.values());
+}
 
-// 3.
 /**
- * @param {{name: string, grades: number[]}[]} students 
- * @return {String}
+ * @param {{name: string, grades: number[]}[]} students
+ * @return {{name: string, averageGrade: number}[]}
  */
 function getAverageGrade(students) {
-    const getAverage = (grades) => grades.reduce((acc, curr) => acc + curr) / grades.length;
-    return students.map((student) => {
-        return {
-            name: student.name,
-            averageGrade: getAverage(student.grades)
-        };
+    if (!Array.isArray(students)) {
+        throw new TypeError('Expected an array of students');
+    }
+    return students.map(s => {
+        if (
+            typeof s !== 'object' ||
+            s === null ||
+            typeof s.name !== 'string' ||
+            !Array.isArray(s.grades) ||
+            s.grades.some(g => typeof g !== 'number')
+        ) {
+            throw new TypeError(
+                'Each student must be { name: string, grades: number[] }'
+            );
+        }
+        const avg = s.grades.reduce((a, b) => a + b, 0) / s.grades.length;
+        return { name: s.name, averageGrade: avg };
     });
+}
+
+module.exports = {
+    getFullName,
+    filterUniqueWords,
+    getAverageGrade,
 };
-
-// getFullName
-const person1 = { firstName: "John", lastName: "Doe" };
-const person2 = { firstName: "Jane", lastName: "Smith" };
-const person3 = { firstName: "Alice", lastName: "Johnson" };
-const person4 = { firstName: "Bob", lastName: "Brown" };
-
-console.log("Full name:", getFullName(person1));
-console.log("Full name:", getFullName(person2));
-console.log("Full name:", getFullName(person3));
-console.log("Full name:", getFullName(person4));
-console.log('\n');
-
-
-// filterUniqueWords
-const words1 = "apple banana apple orange banana kiwi";
-const words2 = "dog cat bird cat dog fish";
-const words3 = "one two three four five six seven";
-const words4 = "red blue green red yellow green";
-
-console.log("Unique words:", filterUniqueWords(words1));
-console.log("Unique words:", filterUniqueWords(words2));
-console.log("Unique words:", filterUniqueWords(words3));
-console.log("Unique words:", filterUniqueWords(words4));
-console.log('\n');
-
-// getAverageGrade
-const students = [
-    { name: "Alice", grades: [90, 85, 88, 92] },
-    { name: "Bob", grades: [70, 75, 78, 72] },
-    { name: "Charlie", grades: [100, 95, 98, 97] }
-];
-
-console.log("Average grade:", getAverageGrade(students));

@@ -1,47 +1,38 @@
-//1.
 /**
  * @return {function(): number}
  */
 function createCounter() {
+    if (arguments.length !== 0) {
+        throw new TypeError('createCounter takes no arguments');
+    }
     let counter = 0;
-    function increment() {
+    return function increment() {
         counter++;
         return counter;
-    }
-    return increment;
+    };
 }
 
-
-const counter = createCounter();
-counter();
-counter();
-counter();
-console.log(counter()); // should show 4
-
-//2.
 /**
- * @param {function()} fn
+ * @param {function} fn
  * @param {number} num
+ * @return {function(): void}
  */
 function repeatFunction(fn, num) {
-    function invokeOriginal() {
-        if (num < 0) {
-            while (true) {
-                fn();
-            }
-        } else {
-            for (let i = 0; i < num; i++) {
-                fn();
-            }
-        }
+    if (typeof fn !== 'function') {
+        throw new TypeError('Expected first argument to be a function');
     }
-    return invokeOriginal;
-};
-function printMe() {
-    console.log("Some text");
-}
-const f1 = repeatFunction(printMe, 3);
-f1();
+    if (typeof num !== 'number' || Number.isNaN(num) || !Number.isInteger(num)) {
+        throw new TypeError('Expected second argument to be an integer');
+    }
+    if (num < 0) {
+        throw new RangeError('Repeat count must be non-negative');
+    }
 
-const f2 = repeatFunction(printMe, -1);
-// f2(); <- WARNING: Will print itself indefinitely
+    return function invokeOriginal() {
+        for (let i = 0; i < num; i++) {
+            fn();
+        }
+    };
+}
+
+module.exports = { createCounter, repeatFunction };

@@ -1,40 +1,47 @@
-//1.
 /**
  * @param {number} num 
- * @param {number} acc 
- * @param {object} cache - cache for optimization
+ * @return {number}
  */
-function calculateFactorial(num, acc = 1, cache = {}) {
-    if (num <= 1) return acc;
-    if (cache[num]) return cache[num] * acc;
-
-    cache[num] = calculateFactorial(num - 1, num * acc, cache) / acc;
-    return cache[num] * acc;
-
-}
-console.log(calculateFactorial(5)); //120
-console.log(calculateFactorial(15)); //1307674368000
-
-//Version with one argument
-function factorial(n) {
-    function factTail(n, acc = 1) {
-        if (n <= 1) return acc;
-        return factTail(n - 1, n * acc);
+function calculateFactorial(num) {
+    if (typeof num !== 'number' || Number.isNaN(num)) {
+        throw new TypeError('Expected num to be a number');
     }
-    return factTail(n);
-}
+    if (!Number.isInteger(num) || num < 0) {
+        throw new RangeError('Expected num to be a non-negative integer');
+    }
 
-//2.
+    const cache = {};
+    function fact(n, acc) {
+        if (n <= 1) return acc;
+        if (cache[n]) return cache[n] * acc;
+        cache[n] = fact(n - 1, n * acc) / acc;
+        return cache[n] * acc;
+    }
+
+    return fact(num, 1);
+}
 
 /**
- * 
  * @param {number} base 
  * @param {number} exp 
+ * @return {number}
  */
 function power(base, exp) {
+    if (typeof base !== 'number' || Number.isNaN(base)) {
+        throw new TypeError('Expected base to be a number');
+    }
+    if (typeof exp !== 'number' || Number.isNaN(exp)) {
+        throw new TypeError('Expected exp to be a number');
+    }
+    if (!Number.isInteger(exp)) {
+        throw new RangeError('Expected exp to be an integer');
+    }
+    if (exp < 0) {
+        throw new RangeError('Expected exp to be a non-negative integer');
+    }
+
     if (exp === 0) return 1;
     return base * power(base, exp - 1);
 }
 
-console.log(power(2, 8));
-console.log(power(2, 16));
+module.exports = { calculateFactorial, power };

@@ -1,0 +1,14 @@
+{
+  "name": "homework_3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "task1.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^30.0.2"
+  }
+}

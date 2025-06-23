@@ -1,55 +1,43 @@
-//1.
 /**
- * 
- * @param {number[]} arr 
- * @param {function()} fn 
+ * @param {any[]} arr 
+ * @param {function(any): any} fn 
+ * @return {{ next(): { value?: any, done: boolean } }}
  */
 function lazyMap(arr, fn) {
+    if (!Array.isArray(arr)) {
+        throw new TypeError('Expected first argument to be an array');
+    }
+    if (typeof fn !== 'function') {
+        throw new TypeError('Expected second argument to be a function');
+    }
     let idx = 0;
-
     return {
         next() {
             if (idx >= arr.length) {
-                return { done: true }; //finished
+                return { done: true };
             }
-            const value = fn(arr[idx]); //applying function
+            const value = fn(arr[idx]);
             idx++;
             return { value, done: false };
         }
     };
 }
-const arr = [1, 2, 3, 4, 5];
-const lazy = lazyMap(arr, x => x * 2);
 
-console.log(lazy.next()); // { value: 2, done: false }
-console.log(lazy.next()); // { value: 4, done: false }
-console.log(lazy.next()); // { value: 6, done: false }
-console.log(lazy.next()); // { value: 8, done: false }
-console.log(lazy.next()); // { value: 10, done: false }
-console.log(lazy.next()); // { done: true }
-
-console.log('\n');
-//2.
+/**
+ * @return {{ next(): { value: number, done: boolean } }}
+ */
 function fibonacciGenerator() {
+    if (arguments.length !== 0) {
+        throw new TypeError('fibonacciGenerator function takes no arguments');
+    }
     let a = 0, b = 1;
-
     return {
         next() {
             const value = a;
-            [a, b] = [b, a + b]; // number before + current
+            [a, b] = [b, a + b];
             return { value, done: false };
         }
     };
 }
-const fib = fibonacciGenerator();
 
-console.log(fib.next());
-console.log(fib.next());
-console.log(fib.next());
-console.log(fib.next());
-console.log(fib.next());
-console.log(fib.next());
-console.log(fib.next());
-console.log(fib.next());
-console.log(fib.next());
-console.log(fib.next()); //34
+module.exports = { lazyMap, fibonacciGenerator };
