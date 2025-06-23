@@ -22,13 +22,17 @@ function filterUniqueWords(words) {
     if (typeof words !== 'string') {
         throw new TypeError('Expected a string');
     }
-    const seen = new Map();
-    for (const w of words.trim().split(/\s+/)) {
-        if (!/^[A-Za-z]+$/.test(w)) continue;
-        const key = w.toLowerCase();
-        if (!seen.has(key)) seen.set(key, w);
-    }
-    return Array.from(seen.values());
+    return Array
+        .from(
+            new Set(
+                words
+                    .trim()
+                    .split(/\s+/)
+                    .filter(w => /^[A-Za-z]+$/.test(w))
+                    .map(w => w.toLowerCase())
+            )
+        )
+        .sort();
 }
 
 /**

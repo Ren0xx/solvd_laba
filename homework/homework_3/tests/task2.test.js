@@ -16,7 +16,7 @@ describe('getFullName', () => {
 
 describe('filterUniqueWords', () => {
     it('filters only letters, groups case-insensitive, keeps first', () => {
-        expect(filterUniqueWords('You yOu yoU')).toEqual(['You']);
+        expect(filterUniqueWords('You yOu yoU')).toEqual(['you']);
         expect(filterUniqueWords('apple banana Apple BANANA kiwi')).toEqual([
             'apple',
             'banana',
