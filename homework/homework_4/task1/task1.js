@@ -15,7 +15,7 @@ Object.keys(person).forEach(key => {
 person.updateInfo = (data) => {
     Object.keys(data).forEach(key => {
         if (this.hasOwnProperty(key)) {
-            Object.defineProperty(this, key, {
+            Object.defineProperty(person, key, {
                 value: data[key],
                 writable: false,
                 configurable: true

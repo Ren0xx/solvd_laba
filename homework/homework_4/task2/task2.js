@@ -7,13 +7,13 @@ const product = {
 Object.defineProperty(product, 'price', {
     enumerable: false,
     writable: false,
-    configurable: true
+    configurable: false
 });
 
 Object.defineProperty(product, 'quantity', {
     enumerable: false,
     writable: false,
-    configurable: true
+    configurable: false
 });
 
 
